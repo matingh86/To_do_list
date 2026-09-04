@@ -1,0 +1,1384 @@
+```html
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>برنامه هفتگی من</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: Tahoma, sans-serif;
+
+            background: #f4f6f8;
+
+            min-height: 100vh;
+
+            padding: 40px 20px;
+
+        }
+
+
+        .container {
+
+            width: 1100px;
+
+            max-width: 100%;
+
+            margin: auto;
+
+        }
+
+
+        /* عنوان */
+
+        .header {
+
+            text-align: center;
+
+            margin-bottom: 35px;
+
+        }
+
+
+        .header h1 {
+
+            font-size: 32px;
+
+            margin-bottom: 10px;
+
+        }
+
+
+        .header p {
+
+            color: #777;
+
+        }
+
+
+        /* =========================
+           فرم اضافه کردن
+        ========================= */
+
+        .add-form {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 18px;
+
+            box-shadow: 0 5px 25px rgba(0,0,0,0.07);
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-bottom: 30px;
+
+        }
+
+
+        .add-form input {
+
+            flex: 1;
+
+            border: 1px solid #ddd;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            font-size: 15px;
+
+        }
+
+
+        .add-form input:focus {
+
+            border-color: #27ae60;
+
+        }
+
+
+        .add-form select {
+
+            border: 1px solid #ddd;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            outline: none;
+
+            background: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .add-form button {
+
+            border: none;
+
+            padding: 12px 25px;
+
+            border-radius: 10px;
+
+            background: #27ae60;
+
+            color: white;
+
+            font-size: 15px;
+
+            cursor: pointer;
+
+        }
+
+
+        .add-form button:hover {
+
+            opacity: 0.85;
+
+        }
+
+
+        /* =========================
+           روزهای هفته
+        ========================= */
+
+        .week {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 20px;
+
+        }
+
+
+        .day-card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 18px;
+
+            min-height: 220px;
+
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+
+            transition: 0.3s;
+
+        }
+
+
+        .day-card:hover {
+
+            transform: translateY(-4px);
+
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+
+        }
+
+
+        .day-title {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            padding-bottom: 12px;
+
+            margin-bottom: 15px;
+
+            border-bottom: 2px solid #eee;
+
+        }
+
+
+        /* =========================
+           کارها
+        ========================= */
+
+        .todo {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 10px;
+
+            background: #f7f8fa;
+
+            padding: 12px;
+
+            border-radius: 10px;
+
+            margin-bottom: 10px;
+
+            transition: 0.3s;
+
+        }
+
+
+        .todo:hover {
+
+            transform: translateX(-3px);
+
+        }
+
+
+        .todo-title {
+
+            font-size: 14px;
+
+            word-break: break-word;
+
+        }
+
+
+        .completed .todo-title {
+
+            text-decoration: line-through;
+
+            opacity: 0.45;
+
+        }
+
+
+        /* =========================
+           دکمه ها
+        ========================= */
+
+        .actions {
+
+            display: flex;
+
+            gap: 5px;
+
+            flex-shrink: 0;
+
+        }
+
+
+        .actions button {
+
+            width: 32px;
+
+            height: 32px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            color: white;
+
+            cursor: pointer;
+
+            font-size: 16px;
+
+        }
+
+
+        .done {
+
+            background: #27ae60;
+
+        }
+
+
+        .delete {
+
+            background: #e74c3c;
+
+        }
+
+
+        .empty {
+
+            text-align: center;
+
+            color: #aaa;
+
+            font-size: 13px;
+
+            padding: 20px 5px;
+
+        }
+
+
+        /* =========================
+           پنجره تبریک
+        ========================= */
+
+        .success-modal {
+
+            position: fixed;
+
+            inset: 0;
+
+            display: none;
+
+            justify-content: center;
+
+            align-items: center;
+
+            background: rgba(0,0,0,0.45);
+
+            backdrop-filter: blur(7px);
+
+            z-index: 9999;
+
+        }
+
+
+        .success-modal.show {
+
+            display: flex;
+
+        }
+
+
+        .success-box {
+
+            background: white;
+
+            width: 350px;
+
+            max-width: 90%;
+
+            padding: 40px 25px;
+
+            border-radius: 25px;
+
+            text-align: center;
+
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+
+            animation: pop 0.5s ease;
+
+        }
+
+
+        .check-circle {
+
+            width: 95px;
+
+            height: 95px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            background: #27ae60;
+
+            color: white;
+
+            font-size: 58px;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            animation: check 0.7s ease;
+
+        }
+
+
+        .success-box h2 {
+
+            font-size: 30px;
+
+            margin: 18px 0 10px;
+
+        }
+
+
+        .success-box p {
+
+            color: #777;
+
+        }
+
+
+        .stars {
+
+            margin-top: 20px;
+
+            font-size: 27px;
+
+            animation: stars 1s infinite alternate;
+
+        }
+
+
+        /* =========================
+           Confetti
+        ========================= */
+
+        .confetti {
+
+            position: fixed;
+
+            width: 10px;
+
+            height: 14px;
+
+            top: -20px;
+
+            z-index: 10000;
+
+            animation: fall linear forwards;
+
+        }
+
+
+        /* =========================
+           Animation
+        ========================= */
+
+        @keyframes pop {
+
+            0% {
+
+                transform: scale(0.4);
+
+                opacity: 0;
+
+            }
+
+            70% {
+
+                transform: scale(1.08);
+
+            }
+
+            100% {
+
+                transform: scale(1);
+
+                opacity: 1;
+
+            }
+
+        }
+
+
+        /* =========================
+           انیمیشن حذف
+        ========================= */
+
+        .todo.deleting {
+
+            animation: deleteAnimation 0.7s forwards;
+
+            pointer-events: none;
+
+        }
+
+
+        @keyframes deleteAnimation {
+
+            0% {
+
+                opacity: 1;
+
+                transform: translateX(0) scale(1);
+
+            }
+
+
+            30% {
+
+                transform: translateX(20px) scale(1.03);
+
+            }
+
+
+            100% {
+
+                opacity: 0;
+
+                transform: translateX(150px) scale(0.7);
+
+                height: 0;
+
+                margin: 0;
+
+                padding: 0;
+
+            }
+
+        }
+
+
+        @keyframes check {
+
+            0% {
+
+                transform: scale(0) rotate(-180deg);
+
+            }
+
+            70% {
+
+                transform: scale(1.2) rotate(10deg);
+
+            }
+
+            100% {
+
+                transform: scale(1) rotate(0);
+
+            }
+
+        }
+
+
+        @keyframes stars {
+
+            from {
+
+                transform: scale(1);
+
+            }
+
+            to {
+
+                transform: scale(1.15);
+
+            }
+
+        }
+
+
+        @keyframes fall {
+
+            0% {
+
+                transform:
+                    translateY(0)
+                    rotate(0deg);
+
+                opacity: 1;
+
+            }
+
+            100% {
+
+                transform:
+                    translateY(110vh)
+                    rotate(720deg);
+
+                opacity: 0;
+
+            }
+
+        }
+
+
+        /* =========================
+           موبایل
+        ========================= */
+
+        @media (max-width: 900px) {
+
+            .week {
+
+                grid-template-columns: repeat(2, 1fr);
+
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .week {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .add-form {
+
+                flex-direction: column;
+
+            }
+
+
+            .add-form button {
+
+                width: 100%;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- عنوان -->
+
+    <div class="header">
+
+        <h1>
+            📝 برنامه هفتگی من
+        </h1>
+
+        <p>
+            کارهات رو برای هر روز برنامه‌ریزی کن 💪
+        </p>
+
+    </div>
+
+
+
+    <!-- =========================
+         فرم اضافه کردن
+    ========================= -->
+
+    <form
+        method="POST"
+        action="{% url 'add_title' %}"
+        class="add-form"
+    >
+
+        {% csrf_token %}
+
+
+        <input
+            type="text"
+            name="title"
+            placeholder="کار جدید..."
+            autocomplete="off"
+            required
+        >
+
+
+        <select name="day" required>
+
+            <option value="sat">
+                شنبه
+            </option>
+
+            <option value="sun">
+                یکشنبه
+            </option>
+
+            <option value="mon">
+                دوشنبه
+            </option>
+
+            <option value="tue">
+                سه‌شنبه
+            </option>
+
+            <option value="wed">
+                چهارشنبه
+            </option>
+
+            <option value="thu">
+                پنجشنبه
+            </option>
+
+            <option value="fri">
+                جمعه
+            </option>
+
+        </select>
+
+
+        <button type="submit">
+
+            ➕ افزودن
+
+        </button>
+
+
+    </form>
+
+
+
+    <!-- =========================
+         روزهای هفته
+    ========================= -->
+
+    <div class="week">
+
+
+
+        <!-- شنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                شنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "sat" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- یکشنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                یکشنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "sun" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- دوشنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                دوشنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "mon" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- سه شنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                سه‌شنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "tue" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- چهارشنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                چهارشنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "wed" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- پنجشنبه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                پنجشنبه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "thu" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <!-- جمعه -->
+
+        <div class="day-card">
+
+            <div class="day-title">
+                جمعه
+            </div>
+
+
+            {% for todo in to_do %}
+
+                {% if todo.day == "fri" %}
+
+                    <div
+                        class="todo
+                        {% if todo.completed %}
+                            completed
+                        {% endif %}"
+                    >
+
+                        <span class="todo-title">
+                            {{ todo.title }}
+                        </span>
+
+
+                        <div class="actions">
+
+                            {% if not todo.completed %}
+
+                                <button
+                                    class="done"
+                                    onclick="completeTodo(
+                                        event,
+                                        '{% url 'complete_work' todo.id %}'
+                                    )"
+                                >
+                                    ✓
+                                </button>
+
+                            {% endif %}
+
+
+                            <button
+                                type="button"
+                                class="delete"
+                                onclick="deleteTodo(
+                                    this,
+                                    '{% url 'del_title' todo.id %}'
+                                )"
+                            >
+                                🗑️
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     پنجره تبریک
+========================= -->
+
+<div
+    id="successModal"
+    class="success-modal"
+>
+
+
+    <div class="success-box">
+
+
+        <div class="check-circle">
+
+            ✓
+
+        </div>
+
+
+        <h2>
+            🎉 آفرین!
+        </h2>
+
+
+        <p>
+            یک کار دیگه هم انجام شد!
+        </p>
+
+
+        <div class="stars">
+            ⭐ ⭐ ⭐
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<div id="confetti"></div>
+
+
+
+<script>
+
+
+function completeTodo(event, url) {
+
+    event.preventDefault();
+
+
+    const modal =
+        document.getElementById("successModal");
+
+
+    modal.classList.add("show");
+
+
+    createConfetti();
+
+
+    setTimeout(function () {
+
+        window.location.href = url;
+
+    }, 1500);
+
+}
+
+
+
+function createConfetti() {
+
+    const container =
+        document.getElementById("confetti");
+
+
+    for (let i = 0; i < 100; i++) {
+
+
+        const confetti =
+            document.createElement("div");
+
+
+        confetti.classList.add("confetti");
+
+
+        confetti.style.left =
+            Math.random() * 100 + "vw";
+
+
+        const size =
+            Math.random() * 8 + 6;
+
+
+        confetti.style.width =
+            size + "px";
+
+
+        confetti.style.height =
+            size * 1.5 + "px";
+
+
+        const colors = [
+
+            "#ff4757",
+            "#ffa502",
+            "#2ed573",
+            "#1e90ff",
+            "#a55eea",
+            "#ff6b81"
+
+        ];
+
+
+        confetti.style.background =
+            colors[
+                Math.floor(
+                    Math.random() * colors.length
+                )
+            ];
+
+
+        confetti.style.animationDuration =
+            (Math.random() * 2 + 2) + "s";
+
+
+        confetti.style.animationDelay =
+            Math.random() * 0.3 + "s";
+
+
+        container.appendChild(confetti);
+
+    }
+
+}
+
+
+/* =========================
+   حذف با انیمیشن
+========================= */
+
+function deleteTodo(button, url) {
+
+    const todo = button.closest(".todo");
+
+
+    if (todo.classList.contains("deleting")) {
+
+        return;
+
+    }
+
+
+    todo.classList.add("deleting");
+
+
+    setTimeout(function () {
+
+        window.location.href = url;
+
+    }, 700);
+
+}
+
+
+</script>
+
+
+</body>
+
+</html>
+```
